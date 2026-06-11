@@ -12,7 +12,6 @@ import {
 import { Button } from "@/components/ui/button";
 
 export default function JobDetailsPage({ params }: { params: Promise<{ id: string }> }) {
-  // Unwrap Next.js 15 params
   const resolvedParams = use(params);
 
   // Mock data matching the reference image content
@@ -47,85 +46,84 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
   };
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-500 max-w-5xl mx-auto pb-16 pt-2">
+    <div className="space-y-8 md:space-y-10 animate-in fade-in duration-500 max-w-5xl mx-auto pb-16 pt-2">
       
-      {/* Top Header & Actions */}
+      {/* Top Header & Actions - Responsive wrap on mobile */}
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <Link href="/jobs" className="flex items-center text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors group">
-          <ArrowLeft size={16} className="mr-2 text-slate-400 group-hover:-translate-x-1 transition-transform" />
+        <Link href="/jobs" className="flex items-center text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors group">
+          <ArrowLeft size={16} className="mr-2 text-slate-400 dark:text-slate-500 group-hover:-translate-x-1 transition-transform" />
           Back to Jobs list
         </Link>
 
-        {/* Action Buttons */}
-        <div className="flex items-center gap-3">
-          <Button className="bg-slate-800 hover:bg-slate-900 text-white rounded-xl shadow-sm transition-all h-10 px-5">
+        <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+          <Button className="flex-1 sm:flex-none bg-slate-800 dark:bg-slate-100 hover:bg-slate-900 dark:hover:bg-slate-200 text-white dark:text-slate-900 rounded-xl shadow-sm transition-all h-10 px-5">
             <Edit className="mr-2 h-4 w-4" /> Edit Job
           </Button>
-          <Button className="bg-red-500 hover:bg-red-600 text-white rounded-xl shadow-sm transition-all h-10 px-5">
-            <Trash2 className="mr-2 h-4 w-4" /> Remove Job
+          <Button className="flex-1 sm:flex-none bg-red-500 hover:bg-red-600 text-white rounded-xl shadow-sm transition-all h-10 px-5">
+            <Trash2 className="mr-2 h-4 w-4" /> Remove
           </Button>
         </div>
       </header>
 
       {/* Title & Meta Data */}
-      <div className="space-y-4 pb-8 border-b border-slate-200/60">
-        <h1 className="text-4xl sm:text-5xl font-semibold text-slate-900 tracking-tight">
+      <div className="space-y-4 pb-8 border-b border-slate-200 dark:border-slate-800">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-slate-900 dark:text-white tracking-tight leading-tight">
           {job.title}
         </h1>
-        <div className="flex flex-wrap items-center gap-6 text-sm font-medium text-slate-400">
+        <div className="flex flex-wrap items-center gap-4 md:gap-6 text-sm font-medium text-slate-500 dark:text-slate-400">
           <div className="flex items-center gap-2">
-            <Briefcase size={16} />
+            <Briefcase size={16} className="text-slate-400 dark:text-slate-500" />
             {job.department}
           </div>
           <div className="flex items-center gap-2">
-            <MapPin size={16} />
+            <MapPin size={16} className="text-slate-400 dark:text-slate-500" />
             {job.location}
           </div>
           <div className="flex items-center gap-2">
-            <Clock size={16} />
+            <Clock size={16} className="text-slate-400 dark:text-slate-500" />
             {job.type}
           </div>
         </div>
       </div>
 
-      {/* Content Sections (Matched exactly to reference layout) */}
-      <div className="space-y-12">
+      {/* Content Sections */}
+      <div className="space-y-10 md:space-y-12">
         
-        <section className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-4 md:gap-8">
-          <h2 className="text-xl font-medium text-slate-900">About the Role :</h2>
-          <p className="text-slate-600 text-[15px] leading-relaxed">
+        <section className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-3 md:gap-8">
+          <h2 className="text-lg md:text-xl font-medium text-slate-900 dark:text-slate-100">About the Role :</h2>
+          <p className="text-slate-600 dark:text-slate-400 text-[15px] leading-relaxed">
             {job.about}
           </p>
         </section>
 
-        <section className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-4 md:gap-8">
-          <h2 className="text-xl font-medium text-slate-900">What You'll Do :</h2>
-          <ul className="text-slate-600 text-[15px] leading-relaxed space-y-3 list-disc pl-4 marker:text-slate-400">
+        <section className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-3 md:gap-8">
+          <h2 className="text-lg md:text-xl font-medium text-slate-900 dark:text-slate-100">What You'll Do :</h2>
+          <ul className="text-slate-600 dark:text-slate-400 text-[15px] leading-relaxed space-y-3 list-disc pl-4 marker:text-slate-400 dark:marker:text-slate-600">
             {job.whatYouWillDo.map((item, i) => (
               <li key={i} className="pl-1">{item}</li>
             ))}
           </ul>
         </section>
 
-        <section className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-4 md:gap-8">
-          <h2 className="text-xl font-medium text-slate-900">What We're Looking For :</h2>
-          <ul className="text-slate-600 text-[15px] leading-relaxed space-y-3 list-disc pl-4 marker:text-slate-400">
+        <section className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-3 md:gap-8">
+          <h2 className="text-lg md:text-xl font-medium text-slate-900 dark:text-slate-100">What We're Looking For :</h2>
+          <ul className="text-slate-600 dark:text-slate-400 text-[15px] leading-relaxed space-y-3 list-disc pl-4 marker:text-slate-400 dark:marker:text-slate-600">
             {job.whatWeAreLookingFor.map((item, i) => (
               <li key={i} className="pl-1">{item}</li>
             ))}
           </ul>
         </section>
 
-        <section className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-4 md:gap-8">
-          <h2 className="text-xl font-medium text-slate-900">Nice to Have :</h2>
-          <p className="text-slate-600 text-[15px] leading-relaxed whitespace-pre-line">
+        <section className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-3 md:gap-8">
+          <h2 className="text-lg md:text-xl font-medium text-slate-900 dark:text-slate-100">Nice to Have :</h2>
+          <p className="text-slate-600 dark:text-slate-400 text-[15px] leading-relaxed whitespace-pre-line">
             {job.niceToHave}
           </p>
         </section>
 
-        <section className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-4 md:gap-8">
-          <h2 className="text-xl font-medium text-slate-900">What We Offer :</h2>
-          <ul className="text-slate-600 text-[15px] leading-relaxed space-y-3 list-disc pl-4 marker:text-slate-400">
+        <section className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-3 md:gap-8">
+          <h2 className="text-lg md:text-xl font-medium text-slate-900 dark:text-slate-100">What We Offer :</h2>
+          <ul className="text-slate-600 dark:text-slate-400 text-[15px] leading-relaxed space-y-3 list-disc pl-4 marker:text-slate-400 dark:marker:text-slate-600">
             {job.whatWeOffer.map((item, i) => (
               <li key={i} className="pl-1">{item}</li>
             ))}

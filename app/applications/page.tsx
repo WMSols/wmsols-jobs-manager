@@ -46,77 +46,70 @@ export default function ApplicationsPage() {
   );
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
-      <header className="flex items-center justify-between pb-6 border-b border-slate-100/80">
-        <div className="flex items-center text-sm text-slate-500 space-x-2">
-          <span className="hover:text-slate-800 transition-colors cursor-pointer">Dashboard</span>
-          <ChevronRight size={14} className="text-slate-300" />
-          <span className="font-semibold text-slate-900 tracking-tight">Applications</span>
+    <div className="space-y-6 md:space-y-8 animate-in fade-in duration-500">
+      <header className="flex items-center justify-between pb-6 border-b border-slate-200 dark:border-slate-800">
+        <div className="flex items-center text-sm text-slate-500 dark:text-slate-400 space-x-2">
+          <span className="hover:text-slate-800 dark:hover:text-slate-200 transition-colors cursor-pointer">Dashboard</span>
+          <ChevronRight size={14} className="text-slate-300 dark:text-slate-600" />
+          <span className="font-semibold text-slate-900 dark:text-white tracking-tight">Applications</span>
         </div>
       </header>
 
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div className="flex items-center p-1 bg-slate-100/50 border border-slate-100 rounded-xl w-fit">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        {/* Responsive Tabs: Wraps to next line on small screens */}
+        <div className="flex flex-wrap items-center gap-1 p-1 bg-slate-100/50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl w-full md:w-fit">
           {tabs.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-1.5 text-sm font-medium rounded-lg transition-all duration-200 ${
+              className={`px-4 py-1.5 text-sm font-medium rounded-lg transition-all duration-200 flex-1 md:flex-none ${
                 activeTab === tab
-                  ? "bg-white text-blue-600 shadow-sm border border-slate-200/50"
-                  : "text-slate-500 hover:text-slate-700 hover:bg-slate-100/50 border border-transparent"
+                  ? "bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-sm border border-slate-200 dark:border-slate-700"
+                  : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50 border border-transparent"
               }`}
             >
               {tab}
             </button>
           ))}
         </div>
-
-        <div className="relative w-full sm:w-64">
+        {/* Search Input */}
+        {/* <div className="relative w-full md:w-64">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
           <input 
             type="text" 
             placeholder="Search candidates..." 
-            className="w-full pl-9 pr-4 py-2 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+            className="w-full pl-9 pr-4 py-2 text-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
           />
-        </div>
+        </div> */}
       </div>
 
-      <div className="rounded-2xl border border-slate-100/80 bg-white shadow-[0_2px_10px_-3px_rgba(0,0,0,0.03)] overflow-hidden">
-        <Table>
-          <TableHeader className="bg-slate-50/50">
-            <TableRow className="hover:bg-transparent border-slate-100/80">
-              <TableHead className="text-slate-600 font-medium h-12 px-6">Candidate Name</TableHead>
-              <TableHead className="text-slate-600 font-medium h-12">Applied Role</TableHead>
-              <TableHead className="text-slate-600 font-medium h-12">Date</TableHead>
-              <TableHead className="text-slate-600 font-medium h-12">Status</TableHead>
-              <TableHead className="text-right text-slate-600 font-medium h-12 px-6">Actions</TableHead>
+      <div className="w-full overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+        <Table className="w-full min-w-175">
+          <TableHeader className="bg-slate-50/50 dark:bg-slate-950/50">
+            <TableRow className="hover:bg-transparent border-slate-200 dark:border-slate-800">
+              <TableHead className="text-slate-600 dark:text-slate-400 font-medium h-12 px-6">Candidate Name</TableHead>
+              <TableHead className="text-slate-600 dark:text-slate-400 font-medium h-12">Applied Role</TableHead>
+              <TableHead className="text-slate-600 dark:text-slate-400 font-medium h-12">Date</TableHead>
+              <TableHead className="text-slate-600 dark:text-slate-400 font-medium h-12">Status</TableHead>
+              <TableHead className="text-right text-slate-600 dark:text-slate-400 font-medium h-12 px-6">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredApplicants.length > 0 ? (
-              filteredApplicants.map((app) => (
-                <TableRow key={app.id} className="border-slate-100/80 hover:bg-slate-50/50 transition-colors group">
-                  <TableCell className="font-medium text-slate-900 px-6 py-4">{app.name}</TableCell>
-                  <TableCell className="text-slate-500">{app.role}</TableCell>
-                  <TableCell className="text-slate-500">{app.date}</TableCell>
-                  <TableCell>{getStatusBadge(app.status)}</TableCell>
-                  <TableCell className="text-right px-6">
-                    <Link href={`/applications/${app.id}`}>
-                      <Button className="bg-slate-900 hover:bg-slate-800 text-white rounded-xl shadow-md transition-all h-9 px-4">
-                        View Details <ArrowRight size={14} className="ml-2 opacity-70" />
-                      </Button>
-                    </Link>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={5} className="h-32 text-center text-slate-500">
-                  No applications found in this category.
+            {filteredApplicants.map((app) => (
+              <TableRow key={app.id} className="border-slate-200 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                <TableCell className="font-medium text-slate-900 dark:text-slate-100 px-6 py-4">{app.name}</TableCell>
+                <TableCell className="text-slate-500 dark:text-slate-400">{app.role}</TableCell>
+                <TableCell className="text-slate-500 dark:text-slate-400">{app.date}</TableCell>
+                <TableCell>{getStatusBadge(app.status)}</TableCell>
+                <TableCell className="text-right px-6">
+                  <Link href={`/applications/${app.id}`}>
+                    <Button className="bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700 text-white rounded-xl shadow-md transition-all h-9 px-4">
+                      View Details <ArrowRight size={14} className="ml-2 opacity-70" />
+                    </Button>
+                  </Link>
                 </TableCell>
               </TableRow>
-            )}
+            ))}
           </TableBody>
         </Table>
       </div>
