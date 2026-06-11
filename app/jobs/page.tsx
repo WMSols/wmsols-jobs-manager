@@ -32,7 +32,7 @@ export default function JobsPage() {
    <div className="space-y-6 md:space-y-8 animate-in fade-in duration-500">
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
         <div className="flex items-center text-sm text-slate-500 dark:text-slate-400 space-x-2">
-          <span className="hover:text-slate-800 dark:hover:text-slate-200 transition-colors cursor-pointer">Dashboard</span>
+          <a href="/" className="hover:text-slate-800 dark:hover:text-slate-200 transition-colors cursor-pointer">Dashboard</a>
           <ChevronRight size={14} className="text-slate-300 dark:text-slate-600" />
           <span className="font-semibold text-slate-900 dark:text-white tracking-tight">Jobs</span>
         </div>

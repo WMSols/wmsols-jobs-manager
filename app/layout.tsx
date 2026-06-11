@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Job Manager",
+  title: "WMsols | Careers Management",
   description: "Minimalist job application tracking",
 };
 

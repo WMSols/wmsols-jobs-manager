@@ -18,7 +18,7 @@ export function Sidebar() {
   const NavContent = () => (
     <>
       <div className="mb-8 font-semibold text-slate-900 dark:text-white text-xl tracking-tight px-3">
-        JobManager.
+        Careers Management
       </div>
       <nav className="space-y-2 flex-1">
         {links.map((link) => {
@@ -52,7 +52,7 @@ export function Sidebar() {
       {/* Mobile Top Navbar */}
       <div className="md:hidden fixed top-0 left-0 right-0 h-16 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md z-40 flex items-center justify-between px-4">
         <div className="font-semibold text-slate-900 dark:text-white text-lg tracking-tight">
-          JobManager.
+          Careers Management
         </div>
         <Sheet>
           <SheetTrigger asChild>
