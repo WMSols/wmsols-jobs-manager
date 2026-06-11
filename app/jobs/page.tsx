@@ -90,19 +90,6 @@ export default function JobsPage() {
           </SheetContent>
         </Sheet>
       </header>
-
-      {/* Toolbar */}
-      <div className="flex justify-between items-center">
-        <div className="relative w-full sm:w-72">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-          <input 
-            type="text" 
-            placeholder="Search active jobs..." 
-            className="w-full pl-9 pr-4 py-2 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
-          />
-        </div>
-      </div>
-
       {/* Jobs DataTable */}
       <div className="rounded-2xl border border-slate-100/80 bg-white shadow-[0_2px_10px_-3px_rgba(0,0,0,0.03)] overflow-hidden">
         <Table>
