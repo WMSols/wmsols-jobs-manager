@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Briefcase, FileText } from "lucide-react";
+import { ThemeToggle } from "./theme-toggle";
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -13,10 +14,18 @@ export function Sidebar() {
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 border-r border-slate-200 bg-white/50 backdrop-blur-sm p-4">
-      <div className="mb-8 font-semibold text-slate-900 text-xl tracking-tight">
-        JobManager.
-      </div>
-      <nav className="space-y-2">
+      <a href="/" className="mb-8 border-b pb-4 h-30 flex flex-col text-slate-900 text-lg font-bold mt-3">
+<span className=" flex gap-1 text-blue-500">
+        <span 
+      className="w-6 h-6 rounded flex items-center justify-center font-bold text-white text-lg mb-2"
+      style={{ background: 'linear-gradient(to top, #2868A3 0%, #3DA8FF 56%, #1C1344 150%)' }}
+    >
+      W
+    </span>WMsols
+</span>
+       Career Management
+      </a>
+      <nav className="space-y-2 mt-4">
         {links.map((link) => {
           const isActive = pathname.startsWith(link.href);
           const Icon = link.icon;
@@ -36,6 +45,11 @@ export function Sidebar() {
           );
         })}
       </nav>
+      {/* Theme Toggle at the bottom */}
+    <div className="mt-auto pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+      <span className="text-sm font-medium text-slate-500 dark:text-slate-400">Theme</span>
+      <ThemeToggle />
+    </div>
     </aside>
   );
 }
