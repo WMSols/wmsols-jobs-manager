@@ -96,10 +96,9 @@ export default function ApplicationDetailsPage({ params }: { params: Promise<{ i
 
   if (!candidate) return <div>Candidate not found.</div>;
 
-  // Construct full URL for the resume if it exists
-  const documentUrl = candidate.resume 
-    ? `${API_URL}${candidate.resume.url}` 
-    : "/test.pdf"; // Fallback to local test.pdf if no resume attached
+const documentUrl = candidate.resume 
+  ? candidate.resume.url 
+  : "/test.pdf"; // Fallback to local test.pdf if no resume attached
 
   return (
     <div className="space-y-6 md:space-y-8 animate-in fade-in duration-500 max-w-5xl mx-auto pb-12">
