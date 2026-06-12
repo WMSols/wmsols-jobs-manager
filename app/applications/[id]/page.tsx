@@ -11,14 +11,15 @@ import {
   Calendar,
   Phone,
   Briefcase,
-  Loader2
+  Loader2,
+  Send
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { getApplicationById, updateApplicationStatus, JobApplication } from "@/lib/strapi-job-applications";
-
-// Fallback logic specific URL structure
-const API_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337";
 
 export default function ApplicationDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
@@ -26,6 +27,14 @@ export default function ApplicationDetailsPage({ params }: { params: Promise<{ i
   const [candidate, setCandidate] = useState<JobApplication | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
+
+  // Email Modal State
+  const [isReplyOpen, setIsReplyOpen] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [emailData, setEmailData] = useState({
+    senderEmail: "",
+    message: ""
+  });
 
   useEffect(() => {
     const fetchCandidate = async () => {
@@ -43,7 +52,7 @@ export default function ApplicationDetailsPage({ params }: { params: Promise<{ i
           currentStatus: "Pending",
           email: "alice.johnson@example.com",
           phone: 15551234567,
-          createdAt: "2023-10-24T00:00:00.000Z",
+          createdAt: "2026-06-08T00:00:00.000Z",
           coverLetter: null
         });
       } finally {
@@ -59,14 +68,34 @@ export default function ApplicationDetailsPage({ params }: { params: Promise<{ i
     setIsUpdating(true);
     try {
       const response = await updateApplicationStatus(candidate.documentId, newStatus);
-      // Update local state to reflect the change instantly
       setCandidate({ ...candidate, currentStatus: response.data.currentStatus });
     } catch (error) {
       console.error(`Failed to update status to ${newStatus}`, error);
-      // Optimistic update fallback for UI testing if backend fails
       setCandidate({ ...candidate, currentStatus: newStatus });
     } finally {
       setIsUpdating(false);
+    }
+  };
+
+  const handleSendEmail = async () => {
+    if (!candidate) return;
+    setIsSending(true);
+    try {
+      // TODO: Replace with your actual email sending API endpoint
+      // await fetch('/api/send-email', { method: 'POST', body: JSON.stringify({...emailData, to: candidate.email}) });
+      
+      // Simulating network request for sending email
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Automatically update status to replied after email is sent
+      await handleStatusUpdate("Replied");
+      
+      setIsReplyOpen(false);
+      setEmailData({ senderEmail: "", message: "" });
+    } catch (error) {
+      console.error("Failed to send email", error);
+    } finally {
+      setIsSending(false);
     }
   };
 
@@ -96,9 +125,7 @@ export default function ApplicationDetailsPage({ params }: { params: Promise<{ i
 
   if (!candidate) return <div>Candidate not found.</div>;
 
-const documentUrl = candidate.resume 
-  ? candidate.resume.url 
-  : "/test.pdf"; // Fallback to local test.pdf if no resume attached
+  const documentUrl = candidate.resume ? candidate.resume.url : "/test.pdf"; 
 
   return (
     <div className="space-y-6 md:space-y-8 animate-in fade-in duration-500 max-w-5xl mx-auto pb-12">
@@ -120,11 +147,11 @@ const documentUrl = candidate.resume
 
         <div className="flex flex-wrap items-center gap-2 md:gap-3 w-full md:w-auto mt-2 md:mt-0">
           <Button 
-            onClick={() => handleStatusUpdate("Replied")}
+            onClick={() => setIsReplyOpen(true)}
             disabled={isUpdating}
-            className="flex-1 md:flex-none bg-slate-800 dark:bg-slate-800 hover:bg-slate-900 dark:hover:bg-slate-700 text-white rounded-xl shadow-sm transition-all h-10 px-4 disabled:opacity-50"
+            className="flex-1 md:flex-none bg-slate-800 dark:bg-slate-100 hover:bg-slate-900 dark:hover:bg-slate-200 text-white dark:text-slate-900 rounded-xl shadow-sm transition-all h-10 px-4 disabled:opacity-50"
           >
-            <Mail className="mr-2 h-4 w-4" /> Replied
+            <Mail className="mr-2 h-4 w-4" /> Reply
           </Button>
           <Button 
             onClick={() => handleStatusUpdate("Rejected")}
@@ -205,7 +232,6 @@ const documentUrl = candidate.resume
               className="w-full h-full absolute inset-0 border-none bg-white"
               title="Resume Viewer"
             />
-            {/* Fallback */}
             <object data={documentUrl} type="application/pdf" className="w-full h-full absolute inset-0 bg-white">
               <div className="flex flex-col items-center justify-center h-full text-slate-500 dark:text-slate-400 space-y-4 p-6 text-center">
                 <FileText size={48} className="text-slate-300 dark:text-slate-600" />
@@ -216,6 +242,65 @@ const documentUrl = candidate.resume
           </div>
         </div>
       </div>
+
+      {/* Reply Email Modal */}
+      <Dialog open={isReplyOpen} onOpenChange={setIsReplyOpen}>
+        <DialogContent className="bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 w-full sm:max-w-xl p-6 md:p-8 rounded-3xl shadow-2xl">
+          <DialogHeader className="mb-6">
+            <DialogTitle className="text-slate-900 dark:text-white text-2xl font-bold tracking-tight">Reply to Candidate</DialogTitle>
+          </DialogHeader>
+          
+          <div className="grid gap-6">
+            <div className="space-y-2">
+              <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">To</Label>
+              <div className="h-11 px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-500 dark:text-slate-400 text-sm cursor-not-allowed">
+                {candidate.email}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">From (Your Email)</Label>
+              <Input 
+                value={emailData.senderEmail} 
+                onChange={e => setEmailData({...emailData, senderEmail: e.target.value})} 
+                placeholder="hr@yourcompany.com"
+                className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 rounded-xl h-11 text-base" 
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Message</Label>
+              <textarea 
+                value={emailData.message} 
+                onChange={e => setEmailData({...emailData, message: e.target.value})} 
+                placeholder="Type your message here..."
+                className="flex min-h-[160px] w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 px-4 py-3 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500" 
+              />
+            </div>
+
+            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-3">
+              <Button 
+                variant="outline" 
+                onClick={() => setIsReplyOpen(false)}
+                className="h-11 rounded-xl border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
+              >
+                Cancel
+              </Button>
+              <Button 
+                disabled={isSending || !emailData.senderEmail || !emailData.message} 
+                onClick={handleSendEmail} 
+                className="h-11 bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-md transition-all disabled:opacity-50 px-6"
+              >
+                {isSending ? (
+                  <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending...</>
+                ) : (
+                  <><Send className="mr-2 h-4 w-4" /> Send Email</>
+                )}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
